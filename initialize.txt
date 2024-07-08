@@ -1,1 +1,3 @@
 createdb jobly
+psql -d jobly
+\i jobly.sql
