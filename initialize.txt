@@ -1,3 +1,15 @@
 createdb jobly
 psql -d jobly
 \i jobly.sql
+
+
+token that I got from registering the user
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlc3Rlc3QiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzIwNDg5ODgzfQ.Qza4Gpz4Z2T-pdtPd0JbK4BfSM44TkEj5MPyvuZ4cv8"
+
+{
+  "username": "bestest",
+  "password": "12345",
+  "firstName": "Daniel",
+  "lastName": "Makalki",
+  "email": "Daniel_Makalski@gmail.com"
+}
