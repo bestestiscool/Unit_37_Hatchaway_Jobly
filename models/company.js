@@ -31,13 +31,7 @@ class Company {
            (handle, name, description, num_employees, logo_url)
            VALUES ($1, $2, $3, $4, $5)
            RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`,
-      [
-        handle,
-        name,
-        description,
-        numEmployees,
-        logoUrl,
-      ]
+      [handle, name, description, numEmployees, logoUrl]
     );
     const company = result.rows[0];
 
@@ -106,7 +100,10 @@ class Company {
     const company = companyRes.rows[0];
 
     if (!company) throw new NotFoundError(`No company: ${handle}`);
-
+    const jobsRes = await db.query(
+      `SELECT id,title,salary,equity FROM jobs WHERE company_handle =$1`, [handle]
+    )
+    company.jobs = jobsRes.rows;
     return company;
   }
 
@@ -122,13 +119,10 @@ class Company {
    * Throws NotFoundError if not found.
    */
   static async update(handle, data) {
-    const { setCols, values } = sqlForPartialUpdate(
-      data,
-      {
-        numEmployees: "num_employees",
-        logoUrl: "logo_url",
-      }
-    );
+    const { setCols, values } = sqlForPartialUpdate(data, {
+      numEmployees: "num_employees",
+      logoUrl: "logo_url",
+    });
     const handleVarIdx = "$" + (values.length + 1);
 
     const querySql = `UPDATE companies 

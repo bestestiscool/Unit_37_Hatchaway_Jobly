@@ -63,9 +63,7 @@ router.post("/", ensureAdmin,ensureLoggedIn, async function (req, res, next) {
       if (minEmployees !== undefined && maxEmployees !== undefined && minEmployees > maxEmployees) {
         throw new BadRequestError("minEmployees cannot be greater than maxEmployees");
       }
-  
-
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      
       // Pass the filters to the findAll method
       const companies = await Company.findAll({
         name,

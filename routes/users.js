@@ -48,10 +48,10 @@ router.post("/", ensureAdmin, async function (req, res, next) {
  *
  * Returns list of all users.
  *
- * Authorization required: login
+ * Authorization required: same user-as-:username or admin
  **/
 
-router.get("/", ensureAdmin, async function (req, res, next) {
+router.get("/", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const users = await User.findAll();
     return res.json({ users });
@@ -98,6 +98,24 @@ router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, n
 
     const user = await User.update(req.params.username, req.body);
     return res.json({ user });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** POST /users/:username/jobs/:id => { applied: jobId }
+ *
+ * Allows a user to apply for a job.
+ *
+ * Authorization required: same user-as-:username or admin
+ * example: http://localhost:3001/users/thomas1232/jobs/1 => { applied: jobId}
+ **/
+
+router.post("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req, res, next) {
+  try {
+    const { username, id } = req.params;
+    await User.applyForJob(username, id);
+    return res.json({ applied: +id });
   } catch (err) {
     return next(err);
   }
